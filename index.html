@@ -582,7 +582,89 @@
             font-size: 0.9rem;
             margin-bottom: 10px;
         }
+
+/* Responsive Design for Mobile */
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero p {
+        font-size: 1.1rem;
+    }
+
+    .cta-button {
+        padding: 12px 25px;
+        font-size: 0.95rem;
+    }
+
+    .nav-menu {
+        flex-direction: column;
+        gap: 10px;
+        background: var(--bg-card);
+        padding: 10px;
+        border-radius: 15px;
+    }
+
+    nav {
+        top: 10px;
+        right: 10px;
+    }
+
+    .section h2 {
+        font-size: 2.2rem;
+    }
+
+    .experience-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .company-logo {
+        width: 50px;
+        height: 50px;
+        font-size: 1rem;
+    }
+
+    .experience-info h3 {
+        font-size: 1.2rem;
+    }
+
+    .experience-info .company {
+        font-size: 1rem;
+    }
+
+    .skills-grid, .projects-grid, .experience-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .skill-category {
+        padding: 20px;
+    }
+
+    .project-card img {
+        height: 150px;
+    }
+
+    .project-card h3 {
+        font-size: 1.2rem;
+    }
+
+    .project-card p {
+        font-size: 0.85rem;
+    }
+
+    .hero-content {
+        padding: 1rem;
+    }
+
+    .section {
+        padding: 60px 15px;
+    }
+}
+
     </style>
+
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
