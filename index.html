@@ -119,6 +119,65 @@
   }
   .schematic svg{display:block; min-width:640px; width:100%;}
 
+  /* moving signal packet */
+  .packet{
+    fill:var(--accent);
+    filter:drop-shadow(0 0 3px rgba(189,107,62,.7));
+    animation:movePacket 6s linear infinite;
+  }
+  @keyframes movePacket{
+    0%   { cx:95;  }
+    25%  { cx:310; }
+    50%  { cx:525; }
+    75%  { cx:735; }
+    100% { cx:930; }
+  }
+
+  /* node activation pulses, timed to the packet's arrival */
+  .node-camera{animation:nodePulse 6s linear infinite;}
+  .node-model{animation:nodePulse 6s linear infinite; animation-delay:1.5s;}
+  .node-decision{animation:nodePulse 6s linear infinite; animation-delay:3s;}
+  .node-controller{animation:nodePulseDark 6s linear infinite; animation-delay:4.5s;}
+  .node-actuate{animation:textPulse 6s linear infinite; animation-delay:5.7s;}
+
+  @keyframes nodePulse{
+    0%   { stroke:var(--ink-soft); stroke-width:1; }
+    8%   { stroke:var(--accent); stroke-width:2.5; }
+    22%  { stroke:var(--ink-soft); stroke-width:1; }
+    100% { stroke:var(--ink-soft); stroke-width:1; }
+  }
+  @keyframes nodePulseDark{
+    0%   { stroke:#1B2A38; stroke-width:1; }
+    8%   { stroke:var(--accent); stroke-width:2.5; }
+    22%  { stroke:#1B2A38; stroke-width:1; }
+    100% { stroke:#1B2A38; stroke-width:1; }
+  }
+  @keyframes textPulse{
+    0%   { fill:var(--ink); font-weight:500; }
+    8%   { fill:var(--accent-deep); font-weight:700; }
+    22%  { fill:var(--ink); font-weight:500; }
+    100% { fill:var(--ink); font-weight:500; }
+  }
+
+  /* live readout strip under the diagram */
+  .schematic-feed{
+    display:flex; align-items:center; gap:18px; flex-wrap:wrap;
+    margin-top:16px; padding-top:14px; border-top:1px solid var(--line);
+    font-family:var(--mono); font-size:11.5px; color:var(--ink-soft);
+  }
+  .schematic-feed .dot{
+    width:7px; height:7px; border-radius:50%; background:var(--accent);
+    display:inline-block; margin-right:6px; animation:blinkDot 1.2s ease-in-out infinite;
+  }
+  @keyframes blinkDot{ 0%,100%{opacity:1;} 50%{opacity:.25;} }
+  #stageLabel{color:var(--ink); font-weight:500; min-width:84px; display:inline-block;}
+  #resultBadge{
+    padding:3px 10px; border-radius:2px; border:1px solid var(--line);
+    transition:color .2s, border-color .2s;
+  }
+  #resultBadge.pass{color:var(--good); border-color:var(--good);}
+  #resultBadge.reject{color:var(--accent-deep); border-color:var(--accent-deep);}
+
   /* ===== Section shell ===== */
   .section{padding:88px 0; border-top:1px solid var(--line);}
   .section-head{
@@ -284,38 +343,48 @@
         <!-- nodes -->
         <g font-family="IBM Plex Mono" font-size="11" fill="#1B2A38">
           <!-- camera -->
-          <rect x="20" y="40" width="150" height="60" rx="3" fill="#F1EEE5" stroke="#5B6B78"/>
+          <rect class="node-camera" x="20" y="40" width="150" height="60" rx="3" fill="#F1EEE5" stroke="#5B6B78"/>
           <text x="95" y="65" text-anchor="middle" font-weight="500">CAMERA</text>
           <text x="95" y="82" text-anchor="middle" fill="#5B6B78" font-size="10">Line / Area scan</text>
 
           <line x1="170" y1="70" x2="225" y2="70" stroke="#BD6B3E" stroke-width="1.5" marker-end="url(#arrow)"/>
 
           <!-- model -->
-          <rect x="230" y="40" width="160" height="60" rx="3" fill="#F1EEE5" stroke="#5B6B78"/>
+          <rect class="node-model" x="230" y="40" width="160" height="60" rx="3" fill="#F1EEE5" stroke="#5B6B78"/>
           <text x="310" y="65" text-anchor="middle" font-weight="500">CV / DL MODEL</text>
           <text x="310" y="82" text-anchor="middle" fill="#5B6B78" font-size="10">Detect · segment · OCR</text>
 
           <line x1="390" y1="70" x2="445" y2="70" stroke="#BD6B3E" stroke-width="1.5" marker-end="url(#arrow)"/>
 
           <!-- decision -->
-          <rect x="450" y="40" width="150" height="60" rx="3" fill="#F1EEE5" stroke="#5B6B78"/>
+          <rect class="node-decision" x="450" y="40" width="150" height="60" rx="3" fill="#F1EEE5" stroke="#5B6B78"/>
           <text x="525" y="65" text-anchor="middle" font-weight="500">DECISION</text>
           <text x="525" y="82" text-anchor="middle" fill="#5B6B78" font-size="10">Pass / reject / log</text>
 
           <line x1="600" y1="70" x2="655" y2="70" stroke="#BD6B3E" stroke-width="1.5" marker-end="url(#arrow)"/>
 
           <!-- controller -->
-          <rect x="660" y="40" width="150" height="60" rx="3" fill="#1B2A38" stroke="#1B2A38"/>
+          <rect class="node-controller" x="660" y="40" width="150" height="60" rx="3" fill="#1B2A38" stroke="#1B2A38"/>
           <text x="735" y="65" text-anchor="middle" font-weight="500" fill="#F7F5EF">PLC / IO</text>
           <text x="735" y="82" text-anchor="middle" fill="#D9D3C5" font-size="10">Beckhoff · Datexel</text>
 
           <line x1="810" y1="70" x2="865" y2="70" stroke="#BD6B3E" stroke-width="1.5" marker-end="url(#arrow)"/>
 
           <!-- actuation -->
-          <text x="930" y="65" text-anchor="middle" font-weight="500">ACTUATE</text>
+          <text class="node-actuate" x="930" y="65" text-anchor="middle" font-weight="500">ACTUATE</text>
           <text x="930" y="82" text-anchor="middle" fill="#5B6B78" font-size="10">Reject / sort</text>
+
+          <!-- moving signal packet -->
+          <circle class="packet" cx="95" cy="70" r="6"/>
         </g>
       </svg>
+    </div>
+
+    <div class="schematic-feed">
+      <span><span class="dot"></span>LIVE</span>
+      <span>FRAME <strong id="frameCount">0001</strong></span>
+      <span>STAGE <span id="stageLabel">CAMERA</span></span>
+      <span>RESULT <span id="resultBadge">—</span></span>
     </div>
   </section>
 
@@ -554,6 +623,33 @@
 </main>
 
 <footer>© 2026 Sheetal Lamani — Built for computer vision, deep learning & industrial controls.</footer>
+
+<script>
+  (function(){
+    var stages = ['CAMERA','CV/DL MODEL','DECISION','PLC/IO','ACTUATE'];
+    var stageEl = document.getElementById('stageLabel');
+    var frameEl = document.getElementById('frameCount');
+    var resultEl = document.getElementById('resultBadge');
+    var cycleMs = 6000;
+    var stepMs = cycleMs / stages.length;
+    var frame = 0;
+    var idx = 0;
+
+    function tick(){
+      stageEl.textContent = stages[idx];
+      if(stages[idx] === 'ACTUATE'){
+        frame++;
+        frameEl.textContent = String(frame).padStart(4,'0');
+        var pass = Math.random() < 0.82;
+        resultEl.textContent = pass ? 'PASS' : 'REJECT';
+        resultEl.className = pass ? 'pass' : 'reject';
+      }
+      idx = (idx + 1) % stages.length;
+    }
+    tick();
+    setInterval(tick, stepMs);
+  })();
+</script>
 
 </body>
 </html>
